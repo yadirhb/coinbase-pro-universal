@@ -1,5 +1,5 @@
 {
-  "include": ["src", "types", "test"],
+  "include": ["src", "types"],
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "target": "es5",
@@ -32,5 +32,5 @@
     "jsx": "react",
     "esModuleInterop": true
   },
-  "exclude": ["dist", "node_modules"]
+  "exclude": ["dist", "node_modules", "**/test/**/*", "**/*+(index|.test*|.test.d*).ts"]
 }
