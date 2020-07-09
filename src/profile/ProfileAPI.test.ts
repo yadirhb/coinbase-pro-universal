@@ -1,5 +1,5 @@
 import nock from 'nock';
-import { ProfileAPI } from './ProfileAPI';
+import {ProfileAPI} from './ProfileAPI';
 
 describe('ProfileAPI', () => {
   afterEach(() => nock.cleanAll());

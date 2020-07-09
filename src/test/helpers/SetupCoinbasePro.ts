@@ -1,6 +1,6 @@
-import { CoinbasePro } from '../../CoinbasePro';
+import {CoinbasePro} from '../../CoinbasePro';
 import nock from 'nock';
-import { TimeAPI } from '../../time/TimeAPI';
+import {TimeAPI} from '../../time/TimeAPI';
 
 declare global {
   module NodeJS {

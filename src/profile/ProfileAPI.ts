@@ -1,5 +1,5 @@
-import { AxiosInstance } from 'axios';
-import { ISO_8601_MS_UTC, UUID_V4 } from '../payload/common';
+import {AxiosInstance} from 'axios';
+import {ISO_8601_MS_UTC, UUID_V4} from '../payload/common';
 
 type Nickname = 'default' | string;
 

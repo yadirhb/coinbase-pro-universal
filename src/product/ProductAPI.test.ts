@@ -1,11 +1,5 @@
 import nock from 'nock';
-import {
-  Candle,
-  CandleGranularity,
-  OrderBookLevel,
-  ProductAPI,
-  ProductEvent,
-} from '.';
+import {Candle, CandleGranularity, OrderBookLevel, ProductAPI, ProductEvent} from '.';
 import Level1OrderBookBTCEUR from '../test/fixtures/rest/products/BTC-EUR/book/level-1.json';
 import Level2OrderBookBTCEUR from '../test/fixtures/rest/products/BTC-EUR/book/level-2.json';
 import Level2OrderBookBTCUSD from '../test/fixtures/rest/products/BTC-USD/book/level-2.json';
@@ -91,9 +85,7 @@ describe('ProductAPI', () => {
         .get(`${ProductAPI.URL.PRODUCTS}/${productId}/book?level=1`)
         .reply(200, JSON.stringify(Level1OrderBookBTCEUR));
 
-      const orderBook = await global.client.rest.product.getProductOrderBook(
-        productId
-      );
+      const orderBook = await global.client.rest.product.getProductOrderBook(productId);
       expect(orderBook.asks.length).toBe(1);
       expect(orderBook.bids.length).toBe(1);
     });
@@ -107,21 +99,15 @@ describe('ProductAPI', () => {
         .get(`${ProductAPI.URL.PRODUCTS}/BTC-EUR/book?level=2`)
         .reply(200, JSON.stringify(Level2OrderBookBTCEUR));
 
-      const orderBookBTCUSD = await global.client.rest.product.getProductOrderBook(
-        'BTC-USD',
-        {
-          level: OrderBookLevel.TOP_50_BIDS_AND_ASKS,
-        }
-      );
+      const orderBookBTCUSD = await global.client.rest.product.getProductOrderBook('BTC-USD', {
+        level: OrderBookLevel.TOP_50_BIDS_AND_ASKS,
+      });
       expect(orderBookBTCUSD.asks.length).toBe(50);
       expect(orderBookBTCUSD.bids.length).toBe(50);
 
-      const orderBookBTCEUR = await global.client.rest.product.getProductOrderBook(
-        'BTC-EUR',
-        {
-          level: OrderBookLevel.TOP_50_BIDS_AND_ASKS,
-        }
-      );
+      const orderBookBTCEUR = await global.client.rest.product.getProductOrderBook('BTC-EUR', {
+        level: OrderBookLevel.TOP_50_BIDS_AND_ASKS,
+      });
       expect(orderBookBTCEUR.asks.length).toBe(1);
       expect(orderBookBTCEUR.bids.length).toBe(36);
     });
@@ -134,10 +120,7 @@ describe('ProductAPI', () => {
         .get(`${ProductAPI.URL.PRODUCTS}/${productId}/book?level=${level}`)
         .reply(200, JSON.stringify(Level3OrderBookBTCUSD));
 
-      const orderBook = await global.client.rest.product.getProductOrderBook(
-        productId,
-        { level }
-      );
+      const orderBook = await global.client.rest.product.getProductOrderBook(productId, {level});
       expect(orderBook.asks.length).toBe(60);
       expect(orderBook.bids.length).toBe(877);
     });
@@ -161,9 +144,7 @@ describe('ProductAPI', () => {
           })
         );
 
-      const ticker = await global.client.rest.product.getProductTicker(
-        'BTC-USD'
-      );
+      const ticker = await global.client.rest.product.getProductTicker('BTC-USD');
 
       expect(ticker.trade_id).toBeDefined();
       expect(ticker.price).toBe('8092.78000000');
@@ -310,16 +291,9 @@ describe('ProductAPI', () => {
         .query(true)
         .reply(200, JSON.stringify(CandlesBTCUSD));
 
-      const spy = spyOn<any>(
-        global.client.rest.product,
-        'checkNewCandles'
-      ).and.callThrough();
+      const spy = spyOn<any>(global.client.rest.product, 'checkNewCandles').and.callThrough();
 
-      global.client.rest.product.watchCandles(
-        productId,
-        granularity,
-        '2020-03-08T23:00:00.000Z'
-      );
+      global.client.rest.product.watchCandles(productId, granularity, '2020-03-08T23:00:00.000Z');
 
       // jasmine.clock().tick(updateInterval);
       expect(spy).toHaveBeenCalledWith(productId, granularity);
@@ -334,17 +308,9 @@ describe('ProductAPI', () => {
         .query(true)
         .reply(200, JSON.stringify(CandlesBTCUSD));
 
-      global.client.rest.product.watchCandles(
-        productId,
-        granularity,
-        '2020-03-08T23:00:00.000Z'
-      );
+      global.client.rest.product.watchCandles(productId, granularity, '2020-03-08T23:00:00.000Z');
       try {
-        global.client.rest.product.watchCandles(
-          productId,
-          granularity,
-          '2020-03-08T23:00:00.000Z'
-        );
+        global.client.rest.product.watchCandles(productId, granularity, '2020-03-08T23:00:00.000Z');
         done.fail('No error has been thrown');
       } catch (error) {
         done();
@@ -370,32 +336,20 @@ describe('ProductAPI', () => {
 
       const onNewCandle = jasmine
         .createSpy('onNewCandle')
-        .and.callFake(
-          (
-            emittedProductId: string,
-            emittedGranularity: CandleGranularity,
-            candle: Candle
-          ) => {
-            expect(emittedProductId).toBe(productId);
-            expect(emittedGranularity).toBe(granularity);
-            const { openTimeInISO } = candle;
-            if (openTimeInISO === expectedISO) {
-              done();
-            } else {
-              done.fail(
-                `Received "${openTimeInISO}" but expected "${expectedISO}".`
-              );
-            }
+        .and.callFake((emittedProductId: string, emittedGranularity: CandleGranularity, candle: Candle) => {
+          expect(emittedProductId).toBe(productId);
+          expect(emittedGranularity).toBe(granularity);
+          const {openTimeInISO} = candle;
+          if (openTimeInISO === expectedISO) {
+            done();
+          } else {
+            done.fail(`Received "${openTimeInISO}" but expected "${expectedISO}".`);
           }
-        );
+        });
 
       global.client.rest.on(ProductEvent.NEW_CANDLE, onNewCandle);
 
-      global.client.rest.product.watchCandles(
-        productId,
-        granularity,
-        '2020-03-08T23:00:00.000Z'
-      );
+      global.client.rest.product.watchCandles(productId, granularity, '2020-03-08T23:00:00.000Z');
       jasmine.clock().tick(updateInterval);
       jasmine.clock().tick(updateInterval);
     });
@@ -411,24 +365,10 @@ describe('ProductAPI', () => {
         .query(true)
         .reply(200, JSON.stringify(CandlesBTCUSD));
 
-      global.client.rest.product.watchCandles(
-        productId,
-        CandleGranularity.ONE_HOUR,
-        '2020-03-08T23:00:00.000Z'
-      );
-      global.client.rest.product.watchCandles(
-        productId,
-        CandleGranularity.SIX_HOURS,
-        '2020-03-09T00:00:00.000Z'
-      );
-      global.client.rest.product.unwatchCandles(
-        productId,
-        CandleGranularity.ONE_HOUR
-      );
-      global.client.rest.product.unwatchCandles(
-        productId,
-        CandleGranularity.SIX_HOURS
-      );
+      global.client.rest.product.watchCandles(productId, CandleGranularity.ONE_HOUR, '2020-03-08T23:00:00.000Z');
+      global.client.rest.product.watchCandles(productId, CandleGranularity.SIX_HOURS, '2020-03-09T00:00:00.000Z');
+      global.client.rest.product.unwatchCandles(productId, CandleGranularity.ONE_HOUR);
+      global.client.rest.product.unwatchCandles(productId, CandleGranularity.SIX_HOURS);
     });
   });
 });

@@ -1,5 +1,5 @@
-import { AxiosInstance } from 'axios';
-import { OrderSide, Pagination } from '../payload/common';
+import {AxiosInstance} from 'axios';
+import {OrderSide, Pagination} from '../payload/common';
 
 export enum OrderType {
   LIMIT = 'limit',
@@ -74,7 +74,7 @@ export class OrderAPI {
   async cancelOpenOrders(productId?: string): Promise<string[]> {
     const resource = OrderAPI.URL.ORDERS;
     const response = await this.apiClient.delete(resource, {
-      params: productId ? { product_id: productId } : {},
+      params: productId ? {product_id: productId} : {},
     });
     return response.data;
   }
@@ -91,10 +91,10 @@ export class OrderAPI {
     pagination?: Pagination
   ): Promise<{
     data: Order[];
-    pagination: { after?: string; before?: string };
+    pagination: {after?: string; before?: string};
   }> {
     const resource = OrderAPI.URL.ORDERS;
-    const response = await this.apiClient.get(resource, { params: pagination });
+    const response = await this.apiClient.get(resource, {params: pagination});
     return {
       data: response.data,
       pagination: {

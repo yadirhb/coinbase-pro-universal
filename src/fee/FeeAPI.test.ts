@@ -8,7 +8,9 @@ describe('FeeAPI', () => {
         taker_fee_rate: '0.0050',
         usd_volume: null,
       };
-      nock(global.REST_URL).get('/fees').reply(200, response);
+      nock(global.REST_URL)
+        .get('/fees')
+        .reply(200, response);
       const canceledOrderIds = await global.client.rest.fee.getCurrentFees();
       expect(canceledOrderIds).toEqual(response);
     });

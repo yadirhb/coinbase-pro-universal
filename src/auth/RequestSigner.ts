@@ -1,4 +1,4 @@
-import { ClientAuthentication } from '../CoinbasePro';
+import {ClientAuthentication} from '../CoinbasePro';
 import crypto from 'crypto-ts';
 
 export interface RequestSetup {
@@ -16,11 +16,7 @@ export interface SignedRequest {
 
 export class RequestSigner {
   // https://docs.pro.coinbase.com/#creating-a-request
-  static signRequest(
-    auth: ClientAuthentication,
-    setup: RequestSetup,
-    clockSkew: number
-  ): SignedRequest {
+  static signRequest(auth: ClientAuthentication, setup: RequestSetup, clockSkew: number): SignedRequest {
     const timestamp = Date.now() / 1000 + clockSkew;
     const what = `${timestamp}${setup.httpMethod}${setup.requestPath}${setup.payload}`;
 

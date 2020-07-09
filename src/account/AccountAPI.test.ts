@@ -3,7 +3,7 @@ import getAccount from '../test/fixtures/rest/accounts/322dfa88-e10d-4678-856d-2
 import getAccountHistory from '../test/fixtures/rest/accounts/322dfa88-e10d-4678-856d-2930eac3e62d/ledger/GET-200.json';
 import getHolds from '../test/fixtures/rest/accounts/322dfa88-e10d-4678-856d-2930eac3e62d/holds/GET-200.json';
 import listAccounts from '../test/fixtures/rest/accounts/GET-200.json';
-import { AccountAPI, AccountType } from './AccountAPI';
+import {AccountAPI, AccountType} from './AccountAPI';
 
 describe('AccountAPI', () => {
   afterAll(() => nock.cleanAll());
@@ -23,17 +23,13 @@ describe('AccountAPI', () => {
 
     nock(global.REST_URL)
       .persist()
-      .get(
-        `${AccountAPI.URL.ACCOUNTS}/322dfa88-e10d-4678-856d-2930eac3e62d/ledger`
-      )
+      .get(`${AccountAPI.URL.ACCOUNTS}/322dfa88-e10d-4678-856d-2930eac3e62d/ledger`)
       .query(true)
       .reply(200, JSON.stringify(getAccountHistory));
 
     nock(global.REST_URL)
       .persist()
-      .get(
-        `${AccountAPI.URL.ACCOUNTS}/322dfa88-e10d-4678-856d-2930eac3e62d/holds`
-      )
+      .get(`${AccountAPI.URL.ACCOUNTS}/322dfa88-e10d-4678-856d-2930eac3e62d/holds`)
       .query(true)
       .reply(200, JSON.stringify(getHolds));
   });
@@ -80,10 +76,7 @@ describe('AccountAPI', () => {
     it('lists the account activity', async () => {
       const accounts = await global.client.rest.account.listAccounts();
       const accountId = accounts[0].id;
-      const history = await global.client.rest.account.getAccountHistory(
-        accountId,
-        { limit: 100 }
-      );
+      const history = await global.client.rest.account.getAccountHistory(accountId, {limit: 100});
       expect(history).toBeDefined();
     });
   });

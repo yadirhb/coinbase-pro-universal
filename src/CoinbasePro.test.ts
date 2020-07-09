@@ -1,4 +1,4 @@
-import { CoinbasePro } from './CoinbasePro';
+import {CoinbasePro} from './CoinbasePro';
 
 describe('CoinbasePro', () => {
   describe('constructor', () => {

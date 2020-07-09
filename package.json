@@ -19,12 +19,6 @@
       "pre-commit": "tsdx lint"
     }
   },
-  "prettier": {
-    "printWidth": 80,
-    "semi": true,
-    "singleQuote": true,
-    "trailingComma": "es5"
-  },
   "bugs": {
     "url": "https://github.com/yadirhb/coinbase-pro-universal/issues"
   },
@@ -42,6 +36,7 @@
   "devDependencies": {
     "@types/big.js": "4.0.5",
     "@types/ws": "7.2.6",
+    "eslint-plugin-typescript-sort-keys": "1.2.0",
     "husky": "4.2.5",
     "jasmine": "3.5.0",
     "nock": "13.0.2",

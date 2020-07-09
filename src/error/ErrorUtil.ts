@@ -1,4 +1,4 @@
-import { AxiosError } from 'axios';
+import {AxiosError} from 'axios';
 
 export function inAirPlaneMode(error: AxiosError): boolean {
   return error.code === 'ECONNABORTED';

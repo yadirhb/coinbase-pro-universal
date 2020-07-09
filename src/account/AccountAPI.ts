@@ -1,5 +1,5 @@
-import { AxiosInstance } from 'axios';
-import { Pagination } from '../payload/common';
+import {AxiosInstance} from 'axios';
+import {Pagination} from '../payload/common';
 
 export interface Account {
   available: string;
@@ -118,7 +118,7 @@ export class AccountAPI {
     pagination?: Pagination
   ): Promise<{
     data: AccountHistory[];
-    pagination: { after?: string; before?: string };
+    pagination: {after?: string; before?: string};
   }> {
     const resource = `${AccountAPI.URL.ACCOUNTS}/${accountId}/ledger`;
     const response = await this.apiClient.get<AccountHistory[]>(resource, {
@@ -147,7 +147,7 @@ export class AccountAPI {
     pagination?: Pagination
   ): Promise<{
     data: Hold[];
-    pagination: { after?: string; before?: string };
+    pagination: {after?: string; before?: string};
   }> {
     const resource = `${AccountAPI.URL.ACCOUNTS}/${accountId}/holds`;
     const response = await this.apiClient.get<Hold[]>(resource, {

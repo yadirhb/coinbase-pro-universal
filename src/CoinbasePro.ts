@@ -1,11 +1,7 @@
-import { RESTClient } from './client/RESTClient';
-import { WebSocketClient } from './client/WebSocketClient';
-import { TimeAPI } from './time/TimeAPI';
-import {
-  RequestSetup,
-  RequestSigner,
-  SignedRequest,
-} from './auth/RequestSigner';
+import {RESTClient} from './client/RESTClient';
+import {WebSocketClient} from './client/WebSocketClient';
+import {TimeAPI} from './time/TimeAPI';
+import {RequestSetup, RequestSigner, SignedRequest} from './auth/RequestSigner';
 
 export interface ClientAuthentication {
   apiKey: string;
@@ -46,10 +42,7 @@ export class CoinbasePro {
       useSandbox: false,
     }
   ) {
-    this.url =
-      auth.useSandbox === true
-        ? CoinbasePro.SETUP.SANDBOX
-        : CoinbasePro.SETUP.PRODUCTION;
+    this.url = auth.useSandbox === true ? CoinbasePro.SETUP.SANDBOX : CoinbasePro.SETUP.PRODUCTION;
 
     const signRequest = async (setup: RequestSetup): Promise<SignedRequest> => {
       const baseURL = this.url.REST;

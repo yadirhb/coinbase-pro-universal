@@ -1,7 +1,7 @@
-import { AxiosInstance, AxiosResponse } from 'axios';
-import { ISO_8601_MS_UTC, OrderSide, Pagination } from '../payload/common';
-import { CandleBucketUtil } from './CandleBucketUtil';
-import { RESTClient } from '..';
+import {AxiosInstance, AxiosResponse} from 'axios';
+import {ISO_8601_MS_UTC, OrderSide, Pagination} from '../payload/common';
+import {CandleBucketUtil} from './CandleBucketUtil';
+import {RESTClient} from '..';
 
 export interface Product {
   base_currency: string;
@@ -71,17 +71,14 @@ export interface BaseHistoricRateRequest {
   granularity: CandleGranularity;
 }
 
-export interface HistoricRateRequestWithTimeSpan
-  extends BaseHistoricRateRequest {
+export interface HistoricRateRequestWithTimeSpan extends BaseHistoricRateRequest {
   /** Opening time (ISO 8601) of last candle, i.e. "2020-03-15T23:59:59.999Z" */
   end: ISO_8601_MS_UTC;
   /** Opening time (ISO 8601) of first candle, i.e. "2020-03-09T00:00:00.000Z" */
   start: ISO_8601_MS_UTC;
 }
 
-export type HistoricRateRequest =
-  | BaseHistoricRateRequest
-  | HistoricRateRequestWithTimeSpan;
+export type HistoricRateRequest = BaseHistoricRateRequest | HistoricRateRequestWithTimeSpan;
 
 export enum OrderBookLevel {
   ONLY_BEST_BID_AND_ASK = 1,
@@ -190,10 +187,7 @@ export class ProductAPI {
     };
   } = {};
 
-  constructor(
-    private readonly apiClient: AxiosInstance,
-    private readonly restClient: RESTClient
-  ) {}
+  constructor(private readonly apiClient: AxiosInstance, private readonly restClient: RESTClient) {}
 
   /**
    * Get historic rates for a product. Rates are returned in grouped buckets (candlesticks) based on requested
@@ -207,10 +201,7 @@ export class ProductAPI {
    * @param [params] - Desired timespan
    * @see https://docs.pro.coinbase.com/#get-historic-rates
    */
-  async getCandles(
-    productId: string,
-    params: HistoricRateRequest
-  ): Promise<Candle[]> {
+  async getCandles(productId: string, params: HistoricRateRequest): Promise<Candle[]> {
     const resource = `${ProductAPI.URL.PRODUCTS}/${productId}/candles`;
 
     const candleSizeInMillis = params.granularity * 1000;
@@ -222,11 +213,7 @@ export class ProductAPI {
       const fromInMillis = new Date(potentialParams.start).getTime();
       const toInMillis = new Date(potentialParams.end).getTime();
 
-      const bucketsInMillis = CandleBucketUtil.getBucketsInMillis(
-        fromInMillis,
-        toInMillis,
-        candleSizeInMillis
-      );
+      const bucketsInMillis = CandleBucketUtil.getBucketsInMillis(fromInMillis, toInMillis, candleSizeInMillis);
       const bucketsInISO = CandleBucketUtil.getBucketsInISO(bucketsInMillis);
 
       for (let index = 0; index < bucketsInISO.length; index++) {
@@ -260,23 +247,14 @@ export class ProductAPI {
    * @param lastCandleTime - Timestamp (ISO 8601) of last candle received
    * @returns Handle to stop the watch interval.
    */
-  watchCandles(
-    productId: string,
-    granularity: CandleGranularity,
-    lastCandleTime: ISO_8601_MS_UTC
-  ): void {
-    this.watchCandlesConfig[productId] =
-      this.watchCandlesConfig[productId] || {};
+  watchCandles(productId: string, granularity: CandleGranularity, lastCandleTime: ISO_8601_MS_UTC): void {
+    this.watchCandlesConfig[productId] = this.watchCandlesConfig[productId] || {};
     if (this.watchCandlesConfig[productId][granularity]) {
       throw new Error(
         `You are already watching "${productId}" with an interval of "${granularity}" seconds. Please clear this interval before creating a new one.`
       );
     } else {
-      const expectedISO = CandleBucketUtil.addUnitISO(
-        lastCandleTime,
-        granularity,
-        1
-      );
+      const expectedISO = CandleBucketUtil.addUnitISO(lastCandleTime, granularity, 1);
       const intervalId = this.startCandleInterval(productId, granularity);
 
       this.watchCandlesConfig[productId][granularity] = {
@@ -293,8 +271,7 @@ export class ProductAPI {
    * @param granularity - Desired candle size
    */
   unwatchCandles(productId: string, granularity: CandleGranularity): void {
-    const intervalId = this.watchCandlesConfig[productId][granularity]
-      .intervalId;
+    const intervalId = this.watchCandlesConfig[productId][granularity].intervalId;
     clearInterval(intervalId);
     delete this.watchCandlesConfig[productId][granularity];
     if (Object.values(this.watchCandlesConfig[productId]).length === 0) {
@@ -325,7 +302,7 @@ export class ProductAPI {
     pagination?: Pagination
   ): Promise<{
     data: Trade[];
-    pagination: { after?: string; before?: string };
+    pagination: {after?: string; before?: string};
   }> {
     const resource = `${ProductAPI.URL.PRODUCTS}/${productId}/trades`;
     const response = await this.apiClient.get<Trade[]>(resource, {
@@ -350,15 +327,15 @@ export class ProductAPI {
    */
   async getProductOrderBook(
     productId: string,
-    params?: { level: OrderBookLevel.ONLY_BEST_BID_AND_ASK }
+    params?: {level: OrderBookLevel.ONLY_BEST_BID_AND_ASK}
   ): Promise<OrderBookLevel1>;
   async getProductOrderBook(
     productId: string,
-    params?: { level: OrderBookLevel.TOP_50_BIDS_AND_ASKS }
+    params?: {level: OrderBookLevel.TOP_50_BIDS_AND_ASKS}
   ): Promise<OrderBookLevel2>;
   async getProductOrderBook(
     productId: string,
-    params?: { level: OrderBookLevel.FULL_ORDER_BOOK }
+    params?: {level: OrderBookLevel.FULL_ORDER_BOOK}
   ): Promise<OrderBookLevel3>;
   async getProductOrderBook(
     productId: string,
@@ -413,11 +390,7 @@ export class ProductAPI {
     return response.data;
   }
 
-  private mapCandle(
-    payload: number[],
-    sizeInMillis: number,
-    productId: string
-  ): Candle {
+  private mapCandle(payload: number[], sizeInMillis: number, productId: string): Candle {
     const [time, low, high, open, close, volume] = payload;
     const [base, counter] = productId.split('-');
     const openTimeInMillis = time * 1000; // Map seconds to milliseconds
@@ -436,52 +409,30 @@ export class ProductAPI {
     };
   }
 
-  private emitCandle(
-    productId: string,
-    granularity: CandleGranularity,
-    candle: Candle
-  ): void {
+  private emitCandle(productId: string, granularity: CandleGranularity, candle: Candle): void {
     // Emit matched candle
-    this.restClient.emit(
-      ProductEvent.NEW_CANDLE,
-      productId,
-      granularity,
-      candle
-    );
+    this.restClient.emit(ProductEvent.NEW_CANDLE, productId, granularity, candle);
     // Cache timestamp of upcoming candle
-    const nextOpenTime = CandleBucketUtil.addUnitISO(
-      candle.openTimeInMillis,
-      granularity,
-      1
-    );
+    const nextOpenTime = CandleBucketUtil.addUnitISO(candle.openTimeInMillis, granularity, 1);
     this.watchCandlesConfig[productId][granularity].expectedISO = nextOpenTime;
   }
 
-  private async checkNewCandles(
-    productId: string,
-    granularity: CandleGranularity
-  ): Promise<void> {
-    const expectedTimestampISO = this.watchCandlesConfig[productId][granularity]
-      .expectedISO;
+  private async checkNewCandles(productId: string, granularity: CandleGranularity): Promise<void> {
+    const expectedTimestampISO = this.watchCandlesConfig[productId][granularity].expectedISO;
 
     const candles = await this.getCandles(productId, {
       granularity,
       start: expectedTimestampISO,
     });
 
-    const matches = candles.filter(
-      candle => candle.openTimeInISO === expectedTimestampISO
-    );
+    const matches = candles.filter(candle => candle.openTimeInISO === expectedTimestampISO);
     if (matches.length > 0) {
       const matchedCandle = matches[0];
       this.emitCandle(productId, granularity, matchedCandle);
     }
   }
 
-  private startCandleInterval(
-    productId: string,
-    granularity: CandleGranularity
-  ): NodeJS.Timeout {
+  private startCandleInterval(productId: string, granularity: CandleGranularity): NodeJS.Timeout {
     // Check for new candles in the smallest candle interval possible, which is 1 minute
     const updateInterval = CandleGranularity.ONE_MINUTE * 1000;
     return global.setInterval(async () => {
