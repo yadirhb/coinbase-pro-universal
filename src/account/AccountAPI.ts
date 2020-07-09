@@ -1,5 +1,5 @@
-import {AxiosInstance} from 'axios';
-import {Pagination} from '../payload/common';
+import { AxiosInstance } from 'axios';
+import { Pagination } from '../payload/common';
 
 export interface Account {
   available: string;
@@ -116,9 +116,14 @@ export class AccountAPI {
   async getAccountHistory(
     accountId: string,
     pagination?: Pagination
-  ): Promise<{data: AccountHistory[]; pagination: {after?: string; before?: string}}> {
+  ): Promise<{
+    data: AccountHistory[];
+    pagination: { after?: string; before?: string };
+  }> {
     const resource = `${AccountAPI.URL.ACCOUNTS}/${accountId}/ledger`;
-    const response = await this.apiClient.get<AccountHistory[]>(resource, {params: pagination});
+    const response = await this.apiClient.get<AccountHistory[]>(resource, {
+      params: pagination,
+    });
     return {
       data: response.data,
       pagination: {
@@ -140,9 +145,14 @@ export class AccountAPI {
   async getHolds(
     accountId: string,
     pagination?: Pagination
-  ): Promise<{data: Hold[]; pagination: {after?: string; before?: string}}> {
+  ): Promise<{
+    data: Hold[];
+    pagination: { after?: string; before?: string };
+  }> {
     const resource = `${AccountAPI.URL.ACCOUNTS}/${accountId}/holds`;
-    const response = await this.apiClient.get<Hold[]>(resource, {params: pagination});
+    const response = await this.apiClient.get<Hold[]>(resource, {
+      params: pagination,
+    });
     return {
       data: response.data,
       pagination: {

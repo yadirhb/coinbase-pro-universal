@@ -1,6 +1,5 @@
 import nock from 'nock';
-import {CurrencyAPI} from './CurrencyAPI';
-
+import { CurrencyAPI } from './CurrencyAPI';
 describe('CurrencyAPI', () => {
   afterEach(() => nock.cleanAll());
 

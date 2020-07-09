@@ -1,5 +1,5 @@
 import nock from 'nock';
-import {ProfileAPI} from './ProfileAPI';
+import { ProfileAPI } from './ProfileAPI';
 
 describe('ProfileAPI', () => {
   afterEach(() => nock.cleanAll());
@@ -59,7 +59,10 @@ describe('ProfileAPI', () => {
     it('returns null if a profile cannot be found', async () => {
       const profileId = '86602c68-306a-4500-ac73-4ce56a91d83d';
 
-      nock(global.REST_URL).get(`${ProfileAPI.URL.PROFILES}/${profileId}`).query(true).reply(404);
+      nock(global.REST_URL)
+        .get(`${ProfileAPI.URL.PROFILES}/${profileId}`)
+        .query(true)
+        .reply(404);
 
       const profile = await global.client.rest.profile.getProfile(profileId);
 
@@ -69,7 +72,10 @@ describe('ProfileAPI', () => {
     it('rethrows errors with status code other than 404', async () => {
       const profileId = '86602c68-306a-4500-ac73-4ce56a91d83d';
 
-      nock(global.REST_URL).get(`${ProfileAPI.URL.PROFILES}/${profileId}`).query(true).reply(403);
+      nock(global.REST_URL)
+        .get(`${ProfileAPI.URL.PROFILES}/${profileId}`)
+        .query(true)
+        .reply(403);
 
       try {
         await global.client.rest.profile.getProfile(profileId);
@@ -81,7 +87,10 @@ describe('ProfileAPI', () => {
 
   describe('transferFunds', () => {
     it('transfers funds from one profile to another', async done => {
-      nock(global.REST_URL).post(`${ProfileAPI.URL.PROFILES}/transfer`).query(true).reply(200);
+      nock(global.REST_URL)
+        .post(`${ProfileAPI.URL.PROFILES}/transfer`)
+        .query(true)
+        .reply(200);
 
       const transfer = {
         amount: '1000.00',

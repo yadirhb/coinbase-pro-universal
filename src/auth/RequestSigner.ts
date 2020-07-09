@@ -1,5 +1,5 @@
-import crypto from 'crypto';
-import {ClientAuthentication} from '../CoinbasePro';
+import { ClientAuthentication } from '../CoinbasePro';
+import crypto from 'crypto-ts';
 
 export interface RequestSetup {
   httpMethod: string;
@@ -16,12 +16,17 @@ export interface SignedRequest {
 
 export class RequestSigner {
   // https://docs.pro.coinbase.com/#creating-a-request
-  static signRequest(auth: ClientAuthentication, setup: RequestSetup, clockSkew: number): SignedRequest {
+  static signRequest(
+    auth: ClientAuthentication,
+    setup: RequestSetup,
+    clockSkew: number
+  ): SignedRequest {
     const timestamp = Date.now() / 1000 + clockSkew;
     const what = `${timestamp}${setup.httpMethod}${setup.requestPath}${setup.payload}`;
-    const key = Buffer.from(auth.apiSecret, 'base64');
-    const hmac = crypto.createHmac('sha256', key);
-    const signature = hmac.update(what).digest('base64');
+
+    const key = crypto.enc.Base64.parse(auth.apiSecret);
+    const hash = crypto.HmacSHA256(what, key);
+    const signature = crypto.enc.Base64.stringify(hash);
 
     return {
       key: auth.apiKey,

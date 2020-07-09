@@ -1,5 +1,5 @@
-import {AxiosInstance} from 'axios';
-import {ISO_8601_MS_UTC, OrderSide, Pagination} from '../payload';
+import { AxiosInstance } from 'axios';
+import { OrderSide, Pagination } from '../payload/common';
 
 export enum OrderType {
   LIMIT = 'limit',
@@ -13,12 +13,6 @@ export enum TimeInForce {
   IMMEDIATE_OR_CANCEL = 'IOC',
 }
 
-export enum CancelOrderPeriod {
-  ONE_DAY = 'day',
-  ONE_HOUR = 'hour',
-  ONE_MINUTE = 'min',
-}
-
 // https://docs.pro.coinbase.com/#self-trade-prevention
 export enum SelfTradePrevention {
   CANCEL_BOTH = 'cb',
@@ -27,16 +21,25 @@ export enum SelfTradePrevention {
   DECREMENT_AND_CANCEL = 'dc',
 }
 
-type BaseOrder = {
+export interface NewOrder {
   client_oid?: string;
+  funds?: string;
   product_id: string;
   side: OrderSide;
+  size?: string;
   stop?: 'loss' | 'entry';
   stop_price?: string;
   stp?: SelfTradePrevention;
-};
+  type: OrderType;
+}
 
-type BasePlacedOrder = {
+export enum OrderStatus {
+  ACTIVE = 'active',
+  OPEN = 'open',
+  PENDING = 'pending',
+}
+
+export interface Order {
   created_at: string;
   executed_value: string;
   fill_fees: string;
@@ -49,52 +52,10 @@ type BasePlacedOrder = {
   side: OrderSide;
   size: string;
   status: OrderStatus;
+  stp: SelfTradePrevention;
   time_in_force: TimeInForce;
   type: OrderType;
-};
-
-export type NewOrder = LimitOrder | AutoCancelLimitOrder | PostOnlyLimitOrder | MarketOrder;
-
-export type AutoCancelLimitOrder = LimitOrder & {
-  cancel_after: CancelOrderPeriod;
-  time_in_force: TimeInForce.GOOD_TILL_TIME;
-};
-
-export type PostOnlyLimitOrder = LimitOrder & {
-  post_only: boolean;
-  time_in_force: TimeInForce.GOOD_TILL_CANCELED | TimeInForce.GOOD_TILL_TIME;
-};
-
-export type LimitOrder = BaseOrder & {
-  price: string;
-  size: string;
-  /** Default is 'GTC'. */
-  time_in_force?: TimeInForce;
-  type: OrderType.LIMIT;
-};
-
-export type MarketOrder = BaseOrder & {type: OrderType.MARKET} & ({size: string} | {funds: string});
-
-export enum OrderStatus {
-  ACTIVE = 'active',
-  DONE = 'done',
-  OPEN = 'open',
-  PENDING = 'pending',
 }
-
-export type PendingOrder = BasePlacedOrder & {
-  status: OrderStatus.PENDING;
-  stp: SelfTradePrevention;
-};
-
-export type FilledOrder = BasePlacedOrder & {
-  done_at: ISO_8601_MS_UTC;
-  done_reason: 'filled';
-  profile_id: string;
-  status: OrderStatus.DONE;
-};
-
-export type Order = PendingOrder | FilledOrder;
 
 export class OrderAPI {
   static readonly URL = {
@@ -113,7 +74,7 @@ export class OrderAPI {
   async cancelOpenOrders(productId?: string): Promise<string[]> {
     const resource = OrderAPI.URL.ORDERS;
     const response = await this.apiClient.delete(resource, {
-      params: productId ? {product_id: productId} : {},
+      params: productId ? { product_id: productId } : {},
     });
     return response.data;
   }
@@ -128,9 +89,12 @@ export class OrderAPI {
    */
   async getOpenOrders(
     pagination?: Pagination
-  ): Promise<{data: Order[]; pagination: {after?: string; before?: string}}> {
+  ): Promise<{
+    data: Order[];
+    pagination: { after?: string; before?: string };
+  }> {
     const resource = OrderAPI.URL.ORDERS;
-    const response = await this.apiClient.get(resource, {params: pagination});
+    const response = await this.apiClient.get(resource, { params: pagination });
     return {
       data: response.data,
       pagination: {

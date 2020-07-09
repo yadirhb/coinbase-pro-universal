@@ -1,7 +1,7 @@
 import nock from 'nock';
 import BTCEUR from '../test/fixtures/rest/fills/product_id/BTC-EUR/GET-200.json';
-import {FillAPI} from './FillAPI';
-import querystring from 'querystring';
+import { FillAPI } from './FillAPI';
+import querystring from 'query-string';
 
 describe('FillAPI', () => {
   afterAll(() => nock.cleanAll());
@@ -16,11 +16,15 @@ describe('FillAPI', () => {
         let payload = BTCEUR;
 
         if (Object.keys(query).includes('?product_id')) {
-          payload = payload.filter(filled => (filled.product_id = query['?product_id'] as string));
+          payload = payload.filter(
+            filled => (filled.product_id = query['?product_id'] as string)
+          );
         }
 
         if (Object.keys(query).includes('?order_id')) {
-          payload = payload.filter(filled => (filled.order_id = query['?order_id'] as string));
+          payload = payload.filter(
+            filled => (filled.order_id = query['?order_id'] as string)
+          );
         }
 
         return [200, JSON.stringify(payload)];
@@ -29,14 +33,18 @@ describe('FillAPI', () => {
 
   describe('getFillsByOrderId', () => {
     it('filters filled orders by order ID', async () => {
-      const filledOrders = await global.client.rest.fill.getFillsByOrderId('0e8029ae-ba75-4e3a-9472-efc8183005c4');
+      const filledOrders = await global.client.rest.fill.getFillsByOrderId(
+        '0e8029ae-ba75-4e3a-9472-efc8183005c4'
+      );
       expect(filledOrders.data[0].trade_id).toBe(2522525);
     });
   });
 
   describe('getFillsByProductId', () => {
     it('filters filled orders by product ID', async () => {
-      const filledOrders = await global.client.rest.fill.getFillsByProductId('BTC-EUR');
+      const filledOrders = await global.client.rest.fill.getFillsByProductId(
+        'BTC-EUR'
+      );
       expect(filledOrders.data.length).toBe(2);
     });
   });

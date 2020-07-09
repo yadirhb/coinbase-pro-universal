@@ -1,42 +1,59 @@
 {
+  "name": "coinbase-pro-universal",
+  "version": "0.1.0",
+  "author": "Yadir Hernandez Batista",
+  "module": "dist/coinbase-pro-universal.esm.js",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "peerDependencies": {},
+  "license": "MIT",
+  "private": false,
+  "homepage": "https://benny.work/coinbase-pro-node",
+  "description": "Universal Coinbase Pro API runs in Node.js, Expo (React-Native), Web, written in TypeScript and covered by tests.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yadirhb/coinbase-pro-universal.git"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
   "bugs": {
-    "url": "https://github.com/bennyn/coinbase-pro-node/issues"
+    "url": "https://github.com/yadirhb/coinbase-pro-universal/issues"
   },
   "dependencies": {
-    "@types/big.js": "4.0.5",
-    "@types/ws": "7.2.6",
     "axios": "0.19.2",
     "axios-retry": "3.1.8",
-    "big.js": "5.2.2",
-    "bufferutil": "4.0.1",
+    "big-js": "3.1.3",
+    "crypto-ts": "https://github.com/yadirhb/crypto-ts",
+    "events": "3.1.0",
+    "query-string": "6.13.1",
     "reconnecting-websocket": "4.4.0",
-    "utf-8-validate": "5.0.2",
+    "utils": "0.3.1",
     "ws": "7.3.1"
   },
-  "description": "Coinbase Pro API for Node.js, written in TypeScript and covered by tests.",
   "devDependencies": {
-    "@types/jasmine": "3.5.11",
-    "@typescript-eslint/eslint-plugin": "3.5.0",
-    "@typescript-eslint/parser": "3.5.0",
-    "cross-env": "7.0.2",
-    "dotenv": "8.2.0",
-    "eslint": "7.4.0",
-    "eslint-config-prettier": "6.11.0",
-    "eslint-plugin-prettier": "3.1.4",
-    "eslint-plugin-typescript-sort-keys": "1.2.0",
-    "generate-changelog": "1.8.0",
+    "@types/big.js": "4.0.5",
+    "@types/ws": "7.2.6",
     "husky": "4.2.5",
     "jasmine": "3.5.0",
-    "lint-staged": "10.2.11",
     "nock": "13.0.2",
     "nyc": "15.1.0",
-    "prettier": "2.0.5",
-    "pretty-quick": "2.0.1",
     "rimraf": "3.0.2",
+    "ts-jest": "^26.1.1",
     "ts-node": "8.10.2",
+    "tsdx": "^0.13.2",
+    "tslib": "^2.0.0",
     "typedoc": "0.17.8",
     "typedoc-plugin-markdown": "2.3.1",
-    "typescript": "3.9.6"
+    "typescript": "^3.9.6"
   },
   "engines": {
     "node": ">= 10.9",
@@ -47,7 +64,6 @@
     "!/dist/demo",
     "!/dist/test"
   ],
-  "homepage": "https://benny.work/coinbase-pro-node",
   "keywords": [
     "API",
     "Bitcoin",
@@ -64,16 +80,8 @@
     "TypeScript",
     "withdraw"
   ],
-  "license": "MIT",
-  "main": "dist/index.js",
-  "name": "coinbase-pro-node",
-  "private": false,
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/bennyn/coinbase-pro-node.git"
-  },
   "scripts": {
-    "build": "tsc",
+    "build": "tsdx build",
     "changelog:commit": "git add CHANGELOG.md && git commit -m \"docs: Updated changelog\"",
     "clean": "rimraf .nyc_output coverage dist",
     "demo": "cross-env NODE_DEBUG=coinbase-pro-node* ts-node src/demo/rest-get-candles.ts",
@@ -82,11 +90,11 @@
     "docs:build": "yarn typedoc",
     "docs:release": "yarn docs:build && git add docs/* && git commit -m \"docs: Updated API\"",
     "docs:start": "docsify serve docs",
-    "dist": "yarn clean && yarn build",
+    "dist": "yarn clean && tsdx build",
     "fix": "yarn fix:other && yarn fix:code",
     "fix:code": "yarn lint:code --fix",
     "fix:other": "yarn prettier --write",
-    "lint": "yarn lint:types && yarn lint:code && yarn lint:other",
+    "lint": "tsdx lint && yarn lint:types && yarn lint:code && yarn lint:other",
     "lint:code": "eslint --ignore-path .gitignore --ext .js,.jsx,.ts,.tsx .",
     "lint:other": "yarn prettier --list-different",
     "lint:types": "tsc --noEmit",
@@ -96,8 +104,26 @@
     "release:major": "generate-changelog -M && yarn changelog:commit && yarn docs:release && npm version major",
     "release:minor": "generate-changelog -m && yarn changelog:commit && yarn docs:release && npm version minor",
     "release:patch": "generate-changelog -p && yarn changelog:commit && yarn docs:release && npm version patch",
+    "start": "tsdx watch",
     "test": "nyc --nycrc-path=nyc.config.coverage.json jasmine --config=jasmine.json",
-    "test:dev": "nyc --nycrc-path=nyc.config.json jasmine --config=jasmine.json"
+    "test:dev": "nyc --nycrc-path=nyc.config.json jasmine --config=jasmine.json",
+    "test:tsdx": "tsdx test"
   },
-  "version": "2.5.0"
+  "jest": {
+    "testMatch": [
+      "**/tests/**/*.[jt]s?(x)",
+      "**/?(*.)+(spec|test).[jt]s?(x)"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|sentry-expo|native-base)"
+    ]
+  }
 }

@@ -1,4 +1,4 @@
-import {AxiosInstance} from 'axios';
+import { AxiosInstance } from 'axios';
 
 export interface VerifiedUser {
   id: string;
@@ -12,7 +12,7 @@ export interface TrailingVolume {
 }
 
 export class UserAPI {
-  static readonly URL: {USERS: string} = {
+  static readonly URL: { USERS: string } = {
     USERS: `/users`,
   };
 

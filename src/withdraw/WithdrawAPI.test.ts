@@ -1,5 +1,5 @@
 import nock from 'nock';
-import {WithdrawAPI, CryptoWithdrawal} from './WithdrawAPI';
+import { WithdrawAPI, CryptoWithdrawal } from './WithdrawAPI';
 
 describe('WithdrawAPI', () => {
   const withdrawalId = 'fake-withdrawal-id-abcd-01234';
@@ -28,8 +28,12 @@ describe('WithdrawAPI', () => {
     const destinationTag = 'satoshi-nakamoto';
 
     it('creates a new withdrawal to crypto address', async () => {
-      const withdrawal = await global.client.rest.withdraw.postCryptoWithdrawal(amount, currency, cryptoAddress);
-      expect(withdrawal).toEqual({amount, currency, id: withdrawalId});
+      const withdrawal = await global.client.rest.withdraw.postCryptoWithdrawal(
+        amount,
+        currency,
+        cryptoAddress
+      );
+      expect(withdrawal).toEqual({ amount, currency, id: withdrawalId });
     });
 
     it('creates a new withdrawal to crypto address (with destination tag)', async () => {
@@ -39,7 +43,7 @@ describe('WithdrawAPI', () => {
         cryptoAddress,
         destinationTag
       );
-      expect(withdrawal).toEqual({amount, currency, id: withdrawalId});
+      expect(withdrawal).toEqual({ amount, currency, id: withdrawalId });
     });
   });
 });

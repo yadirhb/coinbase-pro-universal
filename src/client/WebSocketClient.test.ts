@@ -1,4 +1,4 @@
-import WebSocket = require('ws');
+import WebSocket from 'ws';
 import tickerBTCUSD from '../test/fixtures/ws/ticker/BTC-USD.json';
 import matchesBTCUSD from '../test/fixtures/ws/matches/BTC-USD.json';
 import tickerUnsubscribeSuccess from '../test/fixtures/ws/ticker/unsubscribe-success.json';
@@ -29,7 +29,7 @@ describe('WebSocketClient', () => {
   }
 
   beforeEach(done => {
-    server = new WebSocket.Server({port: WEBSOCKET_PORT});
+    server = new WebSocket.Server({ port: WEBSOCKET_PORT });
     server.on('listening', () => done());
   });
 
@@ -68,7 +68,7 @@ describe('WebSocketClient', () => {
 
     it('supports custom reconnect options', async () => {
       const ws = createWebSocketClient();
-      const socket = ws.connect({startClosed: true});
+      const socket = ws.connect({ startClosed: true });
       expect(socket.readyState).toBe(ReconnectingWebSocket.CLOSED);
     });
   });
@@ -284,7 +284,9 @@ describe('WebSocketClient', () => {
         done();
       });
 
-      ws.on(WebSocketEvent.ON_OPEN, () => ws.unsubscribe(WebSocketChannelName.TICKER));
+      ws.on(WebSocketEvent.ON_OPEN, () =>
+        ws.unsubscribe(WebSocketChannelName.TICKER)
+      );
 
       ws.connect();
     });

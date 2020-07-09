@@ -1,5 +1,10 @@
-import {AxiosInstance} from 'axios';
-import {ISO_8601_MS_UTC, UUID_V4, OrderSide, Pagination} from '../payload/common';
+import { AxiosInstance } from 'axios';
+import {
+  ISO_8601_MS_UTC,
+  UUID_V4,
+  OrderSide,
+  Pagination,
+} from '../payload/common';
 
 export enum Liquidity {
   MAKER = 'M',
@@ -40,9 +45,14 @@ export class FillAPI {
   async getFillsByOrderId(
     orderId: string,
     pagination?: Pagination
-  ): Promise<{data: Fill[]; pagination: {after?: string; before?: string}}> {
+  ): Promise<{
+    data: Fill[];
+    pagination: { after?: string; before?: string };
+  }> {
     const resource = FillAPI.URL.FILLS;
-    const response = await this.apiClient.get(resource, {params: {order_id: orderId, ...pagination}});
+    const response = await this.apiClient.get(resource, {
+      params: { order_id: orderId, ...pagination },
+    });
     return {
       data: response.data,
       pagination: {
@@ -63,9 +73,14 @@ export class FillAPI {
   async getFillsByProductId(
     productId: string,
     pagination?: Pagination
-  ): Promise<{data: Fill[]; pagination: {after?: string; before?: string}}> {
+  ): Promise<{
+    data: Fill[];
+    pagination: { after?: string; before?: string };
+  }> {
     const resource = FillAPI.URL.FILLS;
-    const response = await this.apiClient.get(resource, {params: {product_id: productId, ...pagination}});
+    const response = await this.apiClient.get(resource, {
+      params: { product_id: productId, ...pagination },
+    });
     return {
       data: response.data,
       pagination: {

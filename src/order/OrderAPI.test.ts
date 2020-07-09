@@ -1,6 +1,12 @@
 import nock from 'nock';
-import {NewOrder, OrderAPI, OrderStatus, OrderType, SelfTradePrevention} from './OrderAPI';
-import {OrderSide} from '../payload';
+import {
+  NewOrder,
+  OrderAPI,
+  OrderStatus,
+  OrderType,
+  SelfTradePrevention,
+} from './OrderAPI';
+import { OrderSide } from '../payload';
 
 describe('OrderAPI', () => {
   afterEach(() => nock.cleanAll());
@@ -11,7 +17,8 @@ describe('OrderAPI', () => {
         .post(OrderAPI.URL.ORDERS)
         .query(true)
         .reply((_uri, body) => {
-          const newOrder: NewOrder = typeof body === 'string' ? JSON.parse(body) : body;
+          const newOrder: NewOrder =
+            typeof body === 'string' ? JSON.parse(body) : body;
 
           return [
             200,
@@ -110,12 +117,17 @@ describe('OrderAPI', () => {
           })
         );
 
-      const order = await global.client.rest.order.getOrder('8eba9e7b-08d6-4667-90ca-6db445d743c1');
+      const order = await global.client.rest.order.getOrder(
+        '8eba9e7b-08d6-4667-90ca-6db445d743c1'
+      );
       expect(order!.id).toBe('8eba9e7b-08d6-4667-90ca-6db445d743c1');
     });
 
     it('returns null if an order cannot be found', async () => {
-      nock(global.REST_URL).get(`${OrderAPI.URL.ORDERS}/123`).query(true).reply(404);
+      nock(global.REST_URL)
+        .get(`${OrderAPI.URL.ORDERS}/123`)
+        .query(true)
+        .reply(404);
 
       const order = await global.client.rest.order.getOrder('123');
 
@@ -123,7 +135,10 @@ describe('OrderAPI', () => {
     });
 
     it('rethrows errors with status code other than 404', async () => {
-      nock(global.REST_URL).get(`${OrderAPI.URL.ORDERS}/123`).query(true).reply(403);
+      nock(global.REST_URL)
+        .get(`${OrderAPI.URL.ORDERS}/123`)
+        .query(true)
+        .reply(403);
 
       try {
         await global.client.rest.order.getOrder('123');
@@ -142,7 +157,9 @@ describe('OrderAPI', () => {
 
       const canceledOrderIds = await global.client.rest.order.cancelOpenOrders();
 
-      expect(canceledOrderIds).toEqual(['8eba9e7b-08d6-4667-90ca-6db445d743c1']);
+      expect(canceledOrderIds).toEqual([
+        '8eba9e7b-08d6-4667-90ca-6db445d743c1',
+      ]);
     });
 
     it('correctly deletes all open orders for just the provided productId', async () => {
@@ -150,9 +167,13 @@ describe('OrderAPI', () => {
         .delete(`${OrderAPI.URL.ORDERS}?product_id=ETH-EUR`)
         .reply(200, ['8eba9e7b-08d6-4667-90ca-6db445d743c1']);
 
-      const canceledOrderIds = await global.client.rest.order.cancelOpenOrders('ETH-EUR');
+      const canceledOrderIds = await global.client.rest.order.cancelOpenOrders(
+        'ETH-EUR'
+      );
 
-      expect(canceledOrderIds).toEqual(['8eba9e7b-08d6-4667-90ca-6db445d743c1']);
+      expect(canceledOrderIds).toEqual([
+        '8eba9e7b-08d6-4667-90ca-6db445d743c1',
+      ]);
     });
   });
 });

@@ -1,4 +1,4 @@
-import {CoinbasePro} from '..';
+import { CoinbasePro } from '..';
 
 require('dotenv').config();
 
@@ -22,7 +22,9 @@ export function initClient(): CoinbasePro {
       useSandbox: false,
     });
   }
-  console.info("Using Coinbase Pro's production environment without API key...");
+  console.info(
+    "Using Coinbase Pro's production environment without API key..."
+  );
 
   return new CoinbasePro();
 }

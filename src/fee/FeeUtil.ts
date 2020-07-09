@@ -1,6 +1,6 @@
-import {FeeEstimate, OrderSide, OrderType} from '..';
-import {FeeTier} from '.';
-import Big, {BigSource} from 'big.js';
+import { FeeEstimate, OrderSide, OrderType } from '..';
+import { FeeTier } from '.';
+import Big, { BigSource } from 'big.js';
 
 export class FeeUtil {
   static getFeeRate(type: OrderType, feeTier: FeeTier): number {
@@ -36,7 +36,10 @@ export class FeeUtil {
     const feeRate = FeeUtil.getFeeRate(type, feeTier);
     const totalFee = subTotal.mul(new Big(feeRate));
 
-    const effectiveTotal = side === OrderSide.BUY ? subTotal.plus(totalFee) : subTotal.minus(totalFee);
+    const effectiveTotal =
+      side === OrderSide.BUY
+        ? subTotal.plus(totalFee)
+        : subTotal.minus(totalFee);
     const effectivePricePerUnit = effectiveTotal.div(amount);
 
     return new FeeEstimate({

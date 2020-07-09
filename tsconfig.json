@@ -1,12 +1,18 @@
 {
+  "include": ["src", "types", "test"],
   "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "target": "es5",
+    "module": "esnext",
+    "lib": ["dom", "esnext"],
+    "importHelpers": true,
     "declaration": true,
+    "sourceMap": true,
+    "rootDir": "./src",
+    "strict": true,
     "emitDecoratorMetadata": true,
-    "esModuleInterop": true,
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
-    "lib": ["dom", "es2017"],
-    "module": "commonjs",
     "moduleResolution": "node",
     "noEmitOnError": true,
     "noImplicitReturns": true,
@@ -15,10 +21,16 @@
     "outDir": "dist",
     "removeComments": true,
     "resolveJsonModule": true,
-    "rootDir": "src",
-    "sourceMap": true,
-    "strict": true,
-    "target": "es6"
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "baseUrl": "./src",
+    "paths": {
+      "*": ["*", "node_modules/*"]
+    },
+    "jsx": "react",
+    "esModuleInterop": true
   },
   "exclude": ["dist", "node_modules"]
 }

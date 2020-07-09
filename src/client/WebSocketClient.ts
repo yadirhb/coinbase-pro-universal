@@ -1,8 +1,13 @@
-import {EventEmitter} from 'events';
-import ReconnectingWebSocket, {Event, ErrorEvent, Options, CloseEvent} from 'reconnecting-websocket';
+import { EventEmitter } from 'events';
+import ReconnectingWebSocket, {
+  Event,
+  ErrorEvent,
+  Options,
+  CloseEvent,
+} from 'reconnecting-websocket';
+import { RequestSetup, SignedRequest } from '../auth/RequestSigner';
+import { OrderSide, ISO_8601_MS_UTC, UUID_V4, UserAPI } from '..';
 import WebSocket from 'ws';
-import {RequestSetup, SignedRequest} from '../auth/RequestSigner';
-import {OrderSide, ISO_8601_MS_UTC, UUID_V4, UserAPI} from '..';
 
 export interface WebSocketChannel {
   name: WebSocketChannelName;
@@ -120,7 +125,9 @@ export enum WebSocketResponseType {
   TICKER = 'ticker',
 }
 
-export type WebSocketResponse = {type: WebSocketResponseType} & WebSocketMessage;
+export type WebSocketResponse = {
+  type: WebSocketResponseType;
+} & WebSocketMessage;
 
 // Not exported because it will become "WebSocketResponse" once complete
 type WebSocketMessage =
@@ -166,7 +173,9 @@ export type WebSocketTickerMessage = {
   volume_30d: string;
 };
 
-export type WebSocketLastMatchMessage = Omit<WebSocketMatchMessage, 'type'> & {type: WebSocketResponseType.LAST_MATCH};
+export type WebSocketLastMatchMessage = Omit<WebSocketMatchMessage, 'type'> & {
+  type: WebSocketResponseType.LAST_MATCH;
+};
 
 export type WebSocketSubscription = {
   channels: WebSocketChannel[];
@@ -185,22 +194,42 @@ export enum WebSocketEvent {
 }
 
 export interface WebSocketClient {
-  on(event: WebSocketEvent.ON_CLOSE, listener: (event: CloseEvent) => void): this;
+  on(
+    event: WebSocketEvent.ON_CLOSE,
+    listener: (event: CloseEvent) => void
+  ): this;
 
-  on(event: WebSocketEvent.ON_ERROR, listener: (event: ErrorEvent) => void): this;
+  on(
+    event: WebSocketEvent.ON_ERROR,
+    listener: (event: ErrorEvent) => void
+  ): this;
 
-  on(event: WebSocketEvent.ON_MESSAGE, listener: (response: WebSocketResponse) => void): this;
+  on(
+    event: WebSocketEvent.ON_MESSAGE,
+    listener: (response: WebSocketResponse) => void
+  ): this;
 
-  on(event: WebSocketEvent.ON_MESSAGE_ERROR, listener: (errorMessage: WebSocketErrorMessage) => void): this;
+  on(
+    event: WebSocketEvent.ON_MESSAGE_ERROR,
+    listener: (errorMessage: WebSocketErrorMessage) => void
+  ): this;
 
   on(
     event: WebSocketEvent.ON_MESSAGE_MATCHES,
-    listener: (matchMessage: WebSocketLastMatchMessage | WebSocketMatchMessage) => void
+    listener: (
+      matchMessage: WebSocketLastMatchMessage | WebSocketMatchMessage
+    ) => void
   ): this;
 
-  on(event: WebSocketEvent.ON_MESSAGE_TICKER, listener: (tickerMessage: WebSocketTickerMessage) => void): this;
+  on(
+    event: WebSocketEvent.ON_MESSAGE_TICKER,
+    listener: (tickerMessage: WebSocketTickerMessage) => void
+  ): this;
 
-  on(event: WebSocketEvent.ON_SUBSCRIPTION_UPDATE, listener: (subscriptions: WebSocketSubscription) => void): this;
+  on(
+    event: WebSocketEvent.ON_SUBSCRIPTION_UPDATE,
+    listener: (subscriptions: WebSocketSubscription) => void
+  ): this;
 
   on(event: WebSocketEvent.ON_OPEN, listener: (event: Event) => void): this;
 }
@@ -216,7 +245,12 @@ export class WebSocketClient extends EventEmitter {
   private readonly baseURL: string;
   private socket: ReconnectingWebSocket | undefined;
 
-  constructor(baseURL: string, private readonly signRequest: (setup: RequestSetup) => Promise<SignedRequest>) {
+  constructor(
+    baseURL: string,
+    private readonly signRequest: (
+      setup: RequestSetup
+    ) => Promise<SignedRequest>
+  ) {
     super();
     this.baseURL = baseURL;
   }
@@ -279,7 +313,10 @@ export class WebSocketClient extends EventEmitter {
 
   disconnect(reason: string = 'Unknown reason'): void {
     if (this.socket) {
-      this.socket.close(WebSocketClient.CLOSE_EVENT_CODE.NORMAL_CLOSURE, reason);
+      this.socket.close(
+        WebSocketClient.CLOSE_EVENT_CODE.NORMAL_CLOSURE,
+        reason
+      );
       this.socket = undefined;
     }
   }
@@ -291,7 +328,9 @@ export class WebSocketClient extends EventEmitter {
     }).finally(() => {});
   }
 
-  unsubscribe(channel: WebSocketChannelName | WebSocketChannel | WebSocketChannel[]): void {
+  unsubscribe(
+    channel: WebSocketChannelName | WebSocketChannel | WebSocketChannel[]
+  ): void {
     this.sendMessage({
       channels: this.mapChannels(channel),
       type: WebSocketRequestType.UNSUBSCRIBE,
@@ -300,7 +339,9 @@ export class WebSocketClient extends EventEmitter {
 
   async sendMessage(message: WebSocketRequest): Promise<void> {
     if (!this.socket) {
-      throw new Error(`Failed to send message of type "${message.type}": You need to connect to the WebSocket first.`);
+      throw new Error(
+        `Failed to send message of type "${message.type}": You need to connect to the WebSocket first.`
+      );
     }
 
     /**
@@ -330,10 +371,12 @@ export class WebSocketClient extends EventEmitter {
       reconnectionDelayGrowFactor: 1,
     };
 
-    return {...defaultOptions, ...reconnectOptions};
+    return { ...defaultOptions, ...reconnectOptions };
   }
 
-  private mapChannels(input: WebSocketChannelName | WebSocketChannel | WebSocketChannel[]): WebSocketChannel[] {
+  private mapChannels(
+    input: WebSocketChannelName | WebSocketChannel | WebSocketChannel[]
+  ): WebSocketChannel[] {
     if (Array.isArray(input)) {
       return input;
     } else if (typeof input === 'string') {

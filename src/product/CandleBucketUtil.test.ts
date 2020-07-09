@@ -1,11 +1,6 @@
-import {CandleBucketUtil, CandleGranularity} from '.';
-import oneWeekInMinutes from '../test/fixtures/rest/products/BTC-USD/candles/BTC-USD-1581292800000-60.json';
+import { CandleBucketUtil, CandleGranularity } from '.';
 
 describe('CandleBucketUtil', () => {
-  beforeAll(() => {
-    expect(oneWeekInMinutes.length).toBe(10080);
-  });
-
   describe('getIntervals', () => {
     it('returns valid granularity values as numbers', () => {
       const expected = [60, 300, 900, 3600, 21600, 86400];
@@ -106,7 +101,11 @@ describe('CandleBucketUtil', () => {
       const toInMillis = new Date('2020-02-10T00:00:00.000Z').getTime();
       const candleSizeInMillis = CandleGranularity.ONE_DAY * 1000;
 
-      const candles = CandleBucketUtil.expectedBuckets(fromInMillis, toInMillis, candleSizeInMillis);
+      const candles = CandleBucketUtil.expectedBuckets(
+        fromInMillis,
+        toInMillis,
+        candleSizeInMillis
+      );
 
       expect(candles).toBe(7);
     });
@@ -116,7 +115,11 @@ describe('CandleBucketUtil', () => {
       const toInMillis = new Date('2020-01-01T00:00:00.000Z').getTime();
       const candleSizeInMillis = CandleGranularity.ONE_DAY * 1000;
 
-      const candles = CandleBucketUtil.expectedBuckets(fromInMillis, toInMillis, candleSizeInMillis);
+      const candles = CandleBucketUtil.expectedBuckets(
+        fromInMillis,
+        toInMillis,
+        candleSizeInMillis
+      );
 
       expect(candles).toBe(365);
     });
@@ -124,13 +127,22 @@ describe('CandleBucketUtil', () => {
 
   describe('getBucketsInMillis', () => {
     it('returns the intervals in milliseconds if historic rates API requests must be batched', () => {
-      const expected = [1546300800000, 1572220799999, 1572220800000, 1577836800000];
+      const expected = [
+        1546300800000,
+        1572220799999,
+        1572220800000,
+        1577836800000,
+      ];
 
       const fromInMillis = new Date('2019-01-01T00:00:00.000Z').getTime();
       const toInMillis = new Date('2020-01-01T00:00:00.000Z').getTime();
       const candleSizeInMillis = CandleGranularity.ONE_DAY * 1000;
 
-      const actual = CandleBucketUtil.getBucketsInMillis(fromInMillis, toInMillis, candleSizeInMillis);
+      const actual = CandleBucketUtil.getBucketsInMillis(
+        fromInMillis,
+        toInMillis,
+        candleSizeInMillis
+      );
 
       expect(actual).toEqual(expected);
     });
@@ -138,7 +150,12 @@ describe('CandleBucketUtil', () => {
 
   describe('getBucketsInISO', () => {
     it('converts millisecond buckets into ISO string buckets', () => {
-      const bucketsInMillis = [1546300800000, 1572220799999, 1572220800000, 1577836800000];
+      const bucketsInMillis = [
+        1546300800000,
+        1572220799999,
+        1572220800000,
+        1577836800000,
+      ];
       const bucketsInISO = CandleBucketUtil.getBucketsInISO(bucketsInMillis);
       expect(bucketsInISO).toEqual([
         {
@@ -150,30 +167,6 @@ describe('CandleBucketUtil', () => {
           stop: '2020-01-01T00:00:00.000Z',
         },
       ]);
-    });
-  });
-
-  describe('getMaxPrice', () => {
-    it('gets the maximum closing price by default', () => {
-      const maximum = CandleBucketUtil.getMaxPrice(oneWeekInMinutes);
-      expect(maximum).toBe(10519.83);
-    });
-
-    it('gets the maximum opening price', () => {
-      const maximum = CandleBucketUtil.getMaxPrice(oneWeekInMinutes, 'open');
-      expect(maximum).toBe(10519.84);
-    });
-  });
-
-  describe('getMinPrice', () => {
-    it('gets the minimum closing price by default', () => {
-      const maximum = CandleBucketUtil.getMinPrice(oneWeekInMinutes);
-      expect(maximum).toBe(9626);
-    });
-
-    it('gets the minimum opening price', () => {
-      const maximum = CandleBucketUtil.getMinPrice(oneWeekInMinutes, 'open');
-      expect(maximum).toBe(9625.99);
     });
   });
 });

@@ -1,4 +1,4 @@
-import {AxiosInstance} from 'axios';
+import { AxiosInstance } from 'axios';
 
 export interface CryptoWithdrawal {
   amount: number;
@@ -39,7 +39,11 @@ export class WithdrawAPI {
     destinationTag?: string
   ): Promise<CryptoWithdrawal> {
     const resource = WithdrawAPI.URL.WITHDRAWALS.CRYPTO;
-    const withdrawal: CryptoWithdrawalRequest = {amount, crypto_address: cryptoAddress, currency};
+    const withdrawal: CryptoWithdrawalRequest = {
+      amount,
+      crypto_address: cryptoAddress,
+      currency,
+    };
     if (destinationTag) {
       withdrawal.destination_tag = destinationTag;
     } else {
