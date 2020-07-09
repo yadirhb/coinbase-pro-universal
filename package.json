@@ -76,7 +76,7 @@
     "withdraw"
   ],
   "scripts": {
-    "build": "tsdx build --tsconfig ./tsconfig.build.json",
+    "build": "tsdx build",
     "changelog:commit": "git add CHANGELOG.md && git commit -m \"docs: Updated changelog\"",
     "clean": "rimraf .nyc_output coverage dist",
     "demo": "cross-env NODE_DEBUG=coinbase-pro-node* ts-node src/demo/rest-get-candles.ts",
@@ -89,7 +89,7 @@
     "fix": "yarn fix:other && yarn fix:code",
     "fix:code": "yarn lint:code --fix",
     "fix:other": "yarn prettier --write",
-    "lint": "tsdx lint && yarn lint:types && yarn lint:code && yarn lint:other",
+    "lint": "tsdx lint",
     "lint:code": "eslint --ignore-path .gitignore --ext .js,.jsx,.ts,.tsx .",
     "lint:other": "yarn prettier --list-different",
     "lint:types": "tsc --noEmit",

@@ -1,36 +1,32 @@
 {
-  "include": ["src", "types"],
+  "include": ["src", "types", "test"],
+  "exclude": ["src/test/**/*"],
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
     "target": "es5",
     "module": "esnext",
     "lib": ["dom", "esnext"],
     "importHelpers": true,
+    "resolveJsonModule": true,
     "declaration": true,
     "sourceMap": true,
     "rootDir": "./src",
     "strict": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "node",
-    "noEmitOnError": true,
-    "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "outDir": "dist",
-    "removeComments": true,
-    "resolveJsonModule": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
     "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "moduleResolution": "node",
     "baseUrl": "./src",
     "paths": {
       "*": ["*", "node_modules/*"]
     },
     "jsx": "react",
     "esModuleInterop": true
-  },
-  "exclude": ["dist", "node_modules"]
+  }
 }
