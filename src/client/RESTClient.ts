@@ -49,7 +49,7 @@ export class RESTClient extends EventEmitter {
 
   constructor(baseURL: string, private readonly signRequest: (setup: RequestSetup) => Promise<SignedRequest>) {
     super();
-    this.logger = util.debuglog('coinbase-pro-node');
+    this.logger = util.debuglog('coinbase-pro-universal');
 
     this.httpClient = axios.create({
       baseURL: baseURL,
