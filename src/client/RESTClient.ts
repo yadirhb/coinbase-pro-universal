@@ -6,7 +6,7 @@ import {Candle, CandleGranularity, ProductAPI, ProductEvent} from '../product';
 import {UserAPI} from '../user';
 import {FeeAPI} from '../fee';
 import {FillAPI} from '../fill';
-import querystring from 'querystring';
+import querystring from 'query-string';
 import {ProfileAPI} from '../profile';
 import axiosRetry, {isNetworkOrIdempotentRequestError} from 'axios-retry';
 import util from 'util';
