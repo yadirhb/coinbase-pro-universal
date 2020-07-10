@@ -1,15 +1,14 @@
 {
-  "include": ["src", "types", "test"],
-  "exclude": ["src/test/**/*"],
+  "include": ["src", "types"],
+  "exclude": ["**/test/**"],
   "compilerOptions": {
     "target": "es5",
     "module": "esnext",
     "lib": ["dom", "esnext"],
     "importHelpers": true,
-    "resolveJsonModule": true,
     "declaration": true,
     "sourceMap": true,
-    "rootDir": "./src",
+    "rootDir": "./src/",
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -22,7 +21,7 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
-    "baseUrl": "./src",
+    "baseUrl": "./src/",
     "paths": {
       "*": ["*", "node_modules/*"]
     },

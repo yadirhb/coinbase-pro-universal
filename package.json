@@ -1,59 +1,8 @@
 {
-  "name": "coinbase-pro-universal",
   "version": "0.1.0",
-  "author": "Yadir Hernandez Batista",
-  "module": "dist/coinbase-pro-universal.esm.js",
+  "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
-  "peerDependencies": {},
-  "license": "MIT",
-  "private": false,
-  "homepage": "https://benny.work/coinbase-pro-node",
-  "description": "Universal Coinbase Pro API runs in Node.js, Expo (React-Native), Web, written in TypeScript and covered by tests.",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/yadirhb/coinbase-pro-universal.git"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "tsdx lint"
-    }
-  },
-  "bugs": {
-    "url": "https://github.com/yadirhb/coinbase-pro-universal/issues"
-  },
-  "dependencies": {
-    "axios": "0.19.2",
-    "axios-retry": "3.1.8",
-    "big-js": "3.1.3",
-    "crypto-ts": "https://github.com/yadirhb/crypto-ts",
-    "events": "3.1.0",
-    "query-string": "6.13.1",
-    "reconnecting-websocket": "4.4.0",
-    "utils": "0.3.1",
-    "ws": "7.3.1"
-  },
-  "devDependencies": {
-    "@types/big.js": "4.0.5",
-    "@types/ws": "7.2.6",
-    "eslint-plugin-typescript-sort-keys": "1.2.0",
-    "husky": "4.2.5",
-    "jasmine": "3.5.0",
-    "nock": "13.0.2",
-    "nyc": "15.1.0",
-    "rimraf": "3.0.2",
-    "ts-jest": "^26.1.1",
-    "ts-node": "8.10.2",
-    "tsdx": "^0.13.2",
-    "tslib": "^2.0.0",
-    "typedoc": "0.17.8",
-    "typedoc-plugin-markdown": "2.3.1",
-    "typescript": "^3.9.6"
-  },
-  "engines": {
-    "node": ">= 10.9",
-    "yarn": ">= 1"
-  },
   "files": [
     "dist",
     "!/dist/demo",
@@ -76,33 +25,51 @@
     "withdraw"
   ],
   "scripts": {
-    "build": "tsdx build",
-    "changelog:commit": "git add CHANGELOG.md && git commit -m \"docs: Updated changelog\"",
-    "clean": "rimraf .nyc_output coverage dist",
-    "demo": "cross-env NODE_DEBUG=coinbase-pro-node* ts-node src/demo/rest-get-candles.ts",
-    "demo:ws": "cross-env NODE_DEBUG=coinbase-pro-node* ts-node src/demo/websocket-ticker.ts",
-    "docs": "yarn docs:build && yarn docs:start",
-    "docs:build": "yarn typedoc",
-    "docs:release": "yarn docs:build && git add docs/* && git commit -m \"docs: Updated API\"",
-    "docs:start": "docsify serve docs",
-    "dist": "yarn clean && tsdx build",
-    "fix": "yarn fix:other && yarn fix:code",
-    "fix:code": "yarn lint:code --fix",
-    "fix:other": "yarn prettier --write",
-    "lint": "tsdx lint",
-    "lint:code": "eslint --ignore-path .gitignore --ext .js,.jsx,.ts,.tsx .",
-    "lint:other": "yarn prettier --list-different",
-    "lint:types": "tsc --noEmit",
-    "postversion": "git push origin && git push origin --tags && npm publish",
-    "prettier": "prettier --ignore-path .gitignore --loglevel silent \"**/*.{html,json,scss,yml}\"",
-    "preversion": "git checkout master && git pull && yarn install && yarn lint && yarn test && yarn dist",
-    "release:major": "generate-changelog -M && yarn changelog:commit && yarn docs:release && npm version major",
-    "release:minor": "generate-changelog -m && yarn changelog:commit && yarn docs:release && npm version minor",
-    "release:patch": "generate-changelog -p && yarn changelog:commit && yarn docs:release && npm version patch",
     "start": "tsdx watch",
-    "test": "nyc --nycrc-path=nyc.config.coverage.json jasmine --config=jasmine.json",
-    "test:dev": "nyc --nycrc-path=nyc.config.json jasmine --config=jasmine.json",
-    "test:tsdx": "tsdx test"
+    "build": "tsdx build",
+    "test": "tsdx test",
+    "lint": "tsdx lint",
+    "prepare": "tsdx build"
+  },
+  "peerDependencies": {},
+  "engines": {
+    "node": ">= 10.9",
+    "yarn": ">= 1"
+  },
+  "name": "coinbase-pro-universal",
+  "author": "Yadir Hernandez Batista",
+  "module": "dist/coinbase-pro-universal.esm.js",
+  "homepage": "https://benny.work/coinbase-pro-node",
+  "description": "Universal Coinbase Pro API runs in Node.js, Expo (React-Native), Web, written in TypeScript and covered by tests.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yadirhb/coinbase-pro-universal.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yadirhb/coinbase-pro-universal/issues"
+  },
+  "dependencies": {
+    "axios": "0.19.2",
+    "axios-retry": "3.1.8",
+    "big.js": "5.2.2",
+    "crypto-ts": "https://github.com/yadirhb/crypto-ts",
+    "events": "3.1.0",
+    "query-string": "6.13.1",
+    "reconnecting-websocket": "4.4.0",
+    "utils": "0.3.1",
+    "ws": "7.3.1"
+  },
+  "devDependencies": {
+    "@types/big.js": "4.0.5",
+    "@types/jest": "^26.0.4",
+    "@types/ws": "7.2.6",
+    "husky": "^4.2.5",
+    "nock": "13.0.2",
+    "tsdx": "^0.13.2",
+    "tslib": "^2.0.0",
+    "typedoc": "0.17.8",
+    "typedoc-plugin-markdown": "2.3.1",
+    "typescript": "^3.9.6"
   },
   "jest": {
     "testMatch": [
