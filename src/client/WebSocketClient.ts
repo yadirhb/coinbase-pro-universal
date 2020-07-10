@@ -2,7 +2,6 @@ import {EventEmitter} from 'events';
 import ReconnectingWebSocket, {Event, ErrorEvent, Options, CloseEvent} from 'reconnecting-websocket';
 import {RequestSetup, SignedRequest} from '../auth/RequestSigner';
 import {OrderSide, ISO_8601_MS_UTC, UUID_V4, UserAPI} from '..';
-import WebSocket from 'ws';
 
 export interface WebSocketChannel {
   name: WebSocketChannelName;

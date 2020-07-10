@@ -1,4 +1,3 @@
-import WebSocket from 'ws';
 import tickerBTCUSD from '../test/fixtures/ws/ticker/BTC-USD.json';
 import matchesBTCUSD from '../test/fixtures/ws/matches/BTC-USD.json';
 import tickerUnsubscribeSuccess from '../test/fixtures/ws/ticker/unsubscribe-success.json';
