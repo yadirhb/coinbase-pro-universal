@@ -34,15 +34,15 @@ export class RESTClient extends EventEmitter {
     return this.httpClient.interceptors;
   }
 
-  readonly account: AccountAPI;
-  readonly fee: FeeAPI;
-  readonly fill: FillAPI;
-  readonly order: OrderAPI;
-  readonly product: ProductAPI;
-  readonly profile: ProfileAPI;
-  readonly user: UserAPI;
-  readonly currency: CurrencyAPI;
-  readonly withdraw: WithdrawAPI;
+  public readonly account: AccountAPI;
+  public readonly fee: FeeAPI;
+  public readonly fill: FillAPI;
+  public readonly order: OrderAPI;
+  public readonly product: ProductAPI;
+  public readonly profile: ProfileAPI;
+  public readonly user: UserAPI;
+  public readonly currency: CurrencyAPI;
+  public readonly withdraw: WithdrawAPI;
 
   private readonly httpClient: AxiosInstance;
   private readonly logger: (msg: string, ...param: any[]) => void;
